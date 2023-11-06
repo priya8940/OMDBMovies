@@ -26,8 +26,7 @@ btnElement.addEventListener('click', async ()=>{
 
         //creating like element 
         let iEle = document.createElement('i');
-        //seeting id
-        iEle.id = "like";
+        
         //setting classes
         iEle.classList.add('class', "fa-regular")
         iEle.classList.add('class', "fa-heart");
@@ -46,17 +45,32 @@ btnElement.addEventListener('click', async ()=>{
 //Liking and disliking function
 
 function likeOrDislike(event){
+    const parent = event.target.parentElement;
+    const movieId = parent.id;
     if(event.target.classList.contains('favorite')){
         //icon is red, we need to turn it white
         event.target.classList.remove('favorite');
         event.target.classList.remove('fa-solid');
         event.target.classList.add('fa-regular');
-        //remove movie from fav array
+
+        //search movieId in array and remove it
+        let ind = -1;
+        for(let i=0; i<favoriteMovies.length;i++){
+            if(favoriteMovies[i]===movieId){
+                ind = i;
+            }
+        }
+        if(ind!=-1){
+            favoriteMovies.splice(ind,1);
+        }
     }else{
         //icon is white, we need to turn it Red
         event.target.classList.add('favorite');
         event.target.classList.add('fa-solid');
         event.target.classList.remove('fa-regular');
-        //add movie to fav array
+       
+        //add movie id to fav array
+        favoriteMovies.push(movieId);
     }
+    console.log(favoriteMovies);
 }
