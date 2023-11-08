@@ -64,3 +64,12 @@ body{
 .favorite{
     color: red;
 }
+
+
+/*Movie Details stayle*/
+.movie-details{
+    display: flex;
+}
+.details{
+    margin-left: 100px;
+}
