@@ -31,14 +31,14 @@ body{
 /*search suggestions */
 #search-suggestions{
     width: 450px;
-    height: 300px;
-    background-color: blanchedalmond;
+    background-color: white;
     position: absolute;
     left:33%;
 }
 
 .suggestions-item{
-    background-color: azure;
+    font-size: 30px;
+    margin-left: 10px;
 }
 
 /*Search results */

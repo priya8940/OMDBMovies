@@ -5,9 +5,24 @@ const favoriteMovies = [];
 btnElement.addEventListener('click', async (event)=>{
     event.stopPropagation();
     const searchPattern = searchInputElement.value;
+    searchInputElement.value = "";
     const respons = await fetch(`https://www.omdbapi.com/?s=${searchPattern}&page=2&apikey=ee731cd5`);
     const data = await respons.json();
     const movieArray = data.Search;
+
+    //Insert search pattern in array if its not there
+    let isPatterenFound = false;
+    for(const existingPatteren of searchPatterns){
+        if(existingPatteren === searchPattern){
+            isPatterenFound = true;
+            break;
+        }
+    }
+
+    if(isPatterenFound ===false){
+            searchPatterns.push(searchPattern);
+    }
+
     //remove old search from container
     container.innerHTML = "";
     for(let movie of movieArray){
@@ -42,7 +57,7 @@ btnElement.addEventListener('click', async (event)=>{
         //putting newly created div element into container
         container.appendChild(divEle);
     }
-    
+    suggestionContainer.style.display='none';
 })
 
 //Liking and disliking function
@@ -161,4 +176,35 @@ async function movieDetails(event){
 
     container.appendChild(divEle2);
 
+}
+
+searchInputElement.addEventListener('keyup', searchEntelligence);
+const searchPatterns = [];
+const suggestionContainer = document.getElementById('search-suggestions');
+
+function searchEntelligence(event){
+    //console.log(event.target.value);
+    suggestionContainer.style.display='block';
+    if(searchInputElement.value===''){
+        suggestionContainer.style.display='none';
+    }
+    suggestionContainer.innerHTML = "";
+    const typedValue = event.target.value;
+    for(const existingPattern of searchPatterns){
+        if(existingPattern.includes(typedValue)){
+            const suggetionItemDivEle = document.createElement('div');
+            suggetionItemDivEle.classList.add('suggestions-item');
+
+            const pEle = document.createElement('p');
+            pEle.innerText = existingPattern;
+            suggetionItemDivEle.appendChild(pEle);
+            suggetionItemDivEle.addEventListener('click',pickEntelligence);
+            suggestionContainer.appendChild(suggetionItemDivEle);
+        }
+    }
+}
+
+function pickEntelligence(event){
+    searchInputElement.value = event.target.innerText;
+    suggestionContainer.style.display='none';
 }
